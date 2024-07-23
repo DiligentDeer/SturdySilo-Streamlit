@@ -17,11 +17,11 @@ latest_address_block = address_log['block'].max()
 
 if int(latest_address_block) + 3600 < int(max(historic_block_list)):
     dune_usage = 1
-    address_log = utils.update_and_save_address_list(loaded_address_log=address_log,
-                                                     triggered_block=int(max(historic_block_list)),
-                                                     file_path='address_log.csv')
+    print(dune_usage)
+    address_log = utils.update_and_save_address_list(loaded_address_log=address_log)
 else:
     dune_usage = 0
+    print(dune_usage)
 
 if utils.w3.eth.block_number - const.BLOCK_INTERVAL > latest_block_with_data:
     saved_strategy_data, saved_pps_data = utils.get_data_for_blocks(historic_block_list, saved_strategy_data,

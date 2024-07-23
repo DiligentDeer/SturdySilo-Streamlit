@@ -141,7 +141,7 @@ def get_user_position(user_address, data_provider_address=const.DATA_PROVIDER):
     return data
 
 
-def update_and_save_address_list(loaded_address_log, triggered_block, file_path='address_log.csv'):
+def update_and_save_address_list(loaded_address_log, triggered_block=w3.eth.block_number, file_path='address_log.csv'):
     """
     Updates the address log DataFrame with a new row and saves it to a CSV file.
 
@@ -277,7 +277,9 @@ def compute_user_ltv(sturdy_data_strategy_file, user_address_df, oracle_address_
 
 
 def accumulate_block_with_no_data(latest_block_with_data):
+
     latest_block_number = w3.eth.block_number
+    print(latest_block_number)
     historic_block_list = []
 
     start_block_number = closest_lower_value(latest_block_with_data) + const.BLOCK_INTERVAL
@@ -667,10 +669,12 @@ def get_data_for_blocks(historic_block_list, save_strategy_data, save_pps_data):
     new_strategy_data = merge_strategy_data(historic_block_list=historic_block_list)
     save_strategy_data = save_strategy_data.copy()
     save_strategy_data = pd.concat([save_strategy_data, new_strategy_data], ignore_index=True)
+    save_strategy_data = save_strategy_data.sort_values(by='block')
 
     new_pps_data = merge_pps_data(historic_block_list_pps=historic_block_list)
     save_pps_data = save_pps_data.copy()
     save_pps_data = pd.concat([save_pps_data, new_pps_data], ignore_index=True)
+    save_pps_data = save_pps_data.sort_values(by='block')
 
     save_data(save_strategy_data, save_pps_data)
 
